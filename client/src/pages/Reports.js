@@ -15,23 +15,30 @@ function Reports() {
   }, []);
 
   const fetchData = async () => {
-    const exp = await axios.get(
-  `${process.env.REACT_APP_API_URL}/expenses`,
-  {
-    headers: { Authorization: token }
-  }
-);
+  const exp = await axios.get(
+    `${process.env.REACT_APP_API_URL}/expenses`,
+    {
+      headers: { Authorization: token }
+    }
+  );
 
-    const inc = await axios.get(
-  `${process.env.REACT_APP_API_URL}/income`,
-  {
-    headers: { Authorization: token }
-  }
-);
+  const inc = await axios.get(
+    `${process.env.REACT_APP_API_URL}/income`,
+    {
+      headers: { Authorization: token }
+    }
+  );
+  console.log("Expenses:", exp.data);
+  console.log("Income:", inc.data);
 
-    setExpenses(exp.data);
-    setIncome(inc.data);
+  setExpenses(exp.data);
+  setIncome(inc.data);
+
+  return {
+    expenses: exp.data,
+    income: inc.data
   };
+};
 
   // 📊 CALCULATE MONTHLY REPORTS
   const calculateMonthlyReports = () => {
@@ -91,10 +98,47 @@ function Reports() {
         {/* BUTTON */}
         <button
           style={btn}
-          onClick={() => {
-            setShowMonthly(true);
-            calculateMonthlyReports();
-          }}
+          onClick={async () => {
+  const data = await fetchData();
+
+  const months = {};
+
+  data.expenses.forEach((e) => {
+    const d = new Date(e.date);
+    const key = d.getMonth() + "-" + d.getFullYear();
+
+    if (!months[key]) {
+      months[key] = { expense: 0, income: 0 };
+    }
+
+    months[key].expense += e.amount;
+  });
+
+  data.income.forEach((i) => {
+    const d = new Date(i.date);
+    const key = d.getMonth() + "-" + d.getFullYear();
+
+    if (!months[key]) {
+      months[key] = { expense: 0, income: 0 };
+    }
+
+    months[key].income += i.amount;
+  });
+
+  const result = Object.keys(months).map((key) => {
+    const [month, year] = key.split("-");
+
+    return {
+      month,
+      year,
+      expense: months[key].expense,
+      income: months[key].income,
+    };
+  });
+
+  setMonthlyData(result);
+  setShowMonthly(true);
+}}
         >
           View Monthly Reports 📅
         </button>
