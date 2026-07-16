@@ -28,22 +28,28 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const exp = await axios.get("http://localhost:5000/api/expenses", {
-        headers: { Authorization: token },
-      });
+     const exp = await axios.get(
+  `${process.env.REACT_APP_API_URL}/expenses`,
+  {
+    headers: { Authorization: token },
+  }
+);
 
-      const inc = await axios.get("http://localhost:5000/api/income", {
-        headers: { Authorization: token },
-      });
+      const inc = await axios.get(
+  `${process.env.REACT_APP_API_URL}/income`,
+  {
+    headers: { Authorization: token },
+  }
+);
 
       const currentMonth = new Date().toISOString().slice(0, 7);
 
       const budgetRes = await axios.get(
-        `http://localhost:5000/api/budget/status/${currentMonth}`,
-        {
-          headers: { Authorization: token },
-        },
-      );
+  `${process.env.REACT_APP_API_URL}/budget/status/${currentMonth}`,
+  {
+    headers: { Authorization: token },
+  }
+);
 
       if (budgetRes.data.budget) {
         setBudget(budgetRes.data.budget);
@@ -62,15 +68,15 @@ function Dashboard() {
       const currentMonth = new Date().toISOString().slice(0, 7);
 
       await axios.post(
-        "http://localhost:5000/api/budget/set",
-        {
-          limit: value,
-          month: currentMonth,
-        },
-        {
-          headers: { Authorization: token },
-        },
-      );
+  `${process.env.REACT_APP_API_URL}/budget/set`,
+  {
+    limit: value,
+    month: currentMonth,
+  },
+  {
+    headers: { Authorization: token },
+  }
+);
     } catch (error) {
       console.log(error);
     }

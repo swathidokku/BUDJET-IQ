@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import API from "../services/api";
+
 
 function Register() {
   const [name, setName] = useState("");
@@ -9,19 +9,22 @@ function Register() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const handleRegister = async () => {
-    try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        email,
-        password
-      });
+  try {
+    await axios.post(
+  `${process.env.REACT_APP_API_URL}/auth/register`,
+  {
+    name,
+    email,
+    password,
+  }
+);
 
-      alert("Registered Successfully ✅");
-      navigate("/login");
-    } catch (err) {
-      alert("Error ❌");
-    }
-  };
+    alert("Registered Successfully ✅");
+    navigate("/login");
+  } catch (err) {
+    alert("Error ❌");
+  }
+};
 
   return (
     <div className="container mt-5 text-center">

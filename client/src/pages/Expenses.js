@@ -19,9 +19,12 @@ function Expenses() {
   }, []);
 
   const fetchExpenses = async () => {
-    const res = await axios.get("http://localhost:5000/api/expenses", {
-      headers: { Authorization: token }
-    });
+    const res = await axios.get(
+  `${process.env.REACT_APP_API_URL}/expenses`,
+  {
+    headers: { Authorization: token }
+  }
+);
     setExpenses(res.data);
   };
 
@@ -30,10 +33,10 @@ function Expenses() {
     if (!incomeAmount) return alert("Enter income");
 
     await axios.post(
-      "http://localhost:5000/api/income/add",
-      { amount: incomeAmount, source: "Income" },
-      { headers: { Authorization: token } }
-    );
+  `${process.env.REACT_APP_API_URL}/income/add`,
+  { amount: incomeAmount, source: "Income" },
+  { headers: { Authorization: token } }
+);
 
     setIncomeAmount("");
     navigate("/dashboard");
@@ -46,16 +49,16 @@ function Expenses() {
 
     if (editId) {
       await axios.put(
-        `http://localhost:5000/api/expenses/${editId}`,
-        { amount: expenseAmount, category, date },
-        { headers: { Authorization: token } }
-      );
+  `${process.env.REACT_APP_API_URL}/expenses/${editId}`,
+  { amount: expenseAmount, category, date },
+  { headers: { Authorization: token } }
+);
     } else {
       await axios.post(
-        "http://localhost:5000/api/expenses/add",
-        { amount: expenseAmount, category, date }, // ✅ SEND DATE
-        { headers: { Authorization: token } }
-      );
+  `${process.env.REACT_APP_API_URL}/expenses/add`,
+  { amount: expenseAmount, category, date },
+  { headers: { Authorization: token } }
+);
     }
 
     setExpenseAmount("");
@@ -69,9 +72,9 @@ function Expenses() {
   // ❌ DELETE
   const deleteExpense = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/expenses/${id}`,
-      { headers: { Authorization: token } }
-    );
+  `${process.env.REACT_APP_API_URL}/expenses/${id}`,
+  { headers: { Authorization: token } }
+);
     fetchExpenses();
   };
 

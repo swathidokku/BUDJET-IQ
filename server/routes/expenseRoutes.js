@@ -33,6 +33,8 @@ router.get("/", auth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+//update all expenses
 router.put("/:id", auth, async (req, res) => {
   try {
     const { amount, category, date } = req.body;

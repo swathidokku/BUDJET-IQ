@@ -19,14 +19,19 @@ function Analytics() {
   }, [refresh]);
 
   const fetchData = async () => {
-    const exp = await axios.get("http://localhost:5000/api/expenses", {
-      headers: { Authorization: token }
-    });
+    const exp = await axios.get(
+  `${process.env.REACT_APP_API_URL}/expenses`,
+  {
+    headers: { Authorization: token }
+  }
+);
 
-    const inc = await axios.get("http://localhost:5000/api/income", {
-      headers: { Authorization: token }
-    });
-
+const inc = await axios.get(
+  `${process.env.REACT_APP_API_URL}/income`,
+  {
+    headers: { Authorization: token }
+  }
+);
     setExpenses(exp.data);
     setIncome(inc.data);
   };
